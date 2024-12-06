@@ -8,7 +8,7 @@ export const Counter = () => {
   const {count, history} = useAppSelector(state => state.count);
 
   const increment = () => {
-    dispatch(addCount(10))
+    dispatch(addCount(5))
     dispatch(historyAction())
   };
 
