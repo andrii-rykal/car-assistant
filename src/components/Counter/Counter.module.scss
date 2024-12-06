@@ -1,0 +1,31 @@
+.block {
+  border: 1px solid black;
+  width: max-content;
+  padding: 40px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  align-items: center;
+}
+
+.count {
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.button {
+  padding: 5px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: green;
+  border: none;
+  background-color: lightblue;
+  box-shadow: 0 3px 0;
+  transition: transform 0.4s, box-shadow 0.4s;
+
+  &:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0;
+  }
+}
