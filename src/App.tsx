@@ -1,13 +1,13 @@
-import styles from "./App.module.scss";
-import { Counter } from "./components/Counter";
+// import styles from "./App.module.scss";
+import { Header } from "./components/Header";
+// import { Counter } from "./components/Counter";
 
-function App() {
+export const App = () => {
   return (
-    <>
-      <h1 className={styles.title}>Hello world!</h1>
-      <Counter />
-    </>
+    <div>
+      {/* <h1 className={styles.title}>Hello world!</h1> */}
+      {/* <Counter /> */}
+      <Header />
+    </div>
   )
 }
-
-export default App;
