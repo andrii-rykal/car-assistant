@@ -5,9 +5,43 @@
 .container {
   max-width: var(--max-width-container);
   margin: auto;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-// .title {
-//   background-color: gray;
-//   color: var(--color-white);
-// }
+.list {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  & a {
+    font-size: 20px;
+    color: var(--color-black);
+    padding: 20px 5px;
+  }
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  & button {
+    font-size: 18px;
+    padding: 8px 16px;
+    background-color: var(--color-bg-btn);
+    border-radius: 10px;
+    box-shadow: 0 4px 0 var(--color-shadow-btn);
+    transition: background-color 0.4s, box-shadow 0.3s, transform 0.3s;
+
+    &:hover {
+      background-color: var(--color-bg-btn-hover);
+    }
+
+    &:active {
+      box-shadow: 0 1px 0;
+      transform: translateY(3px);
+    }
+  }
+}
