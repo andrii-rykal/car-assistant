@@ -1,5 +1,10 @@
+import { MainSlider } from "../../components/MainSlider"
+
 export const HomePage = () => {
   return (
-    <h1>Home page</h1>
+    <div>
+      <h1>Home page</h1>
+      <MainSlider />
+    </div>
   )
 }
