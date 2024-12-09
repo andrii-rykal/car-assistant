@@ -1,4 +1,4 @@
-import { Autoplay, Pagination, Navigation } from 'swiper/modules';
+import { Autoplay, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import styles from './MainSlider.module.scss';
 import { Image } from '../../components';
@@ -22,8 +22,8 @@ export const MainSlider = () => (
       pagination={{
         clickable: true,
       }}
-      navigation={true}
-      modules={[Autoplay, Pagination, Navigation]}
+      navigation={false}
+      modules={[Autoplay, Pagination]}
       className={styles.mySwiper}
     >
       <SwiperSlide>
