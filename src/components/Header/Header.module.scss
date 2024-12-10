@@ -1,8 +1,47 @@
 .header {
-  background-color: lightblue;
+  background-color: var(--color-bg-header);
+}
+
+.nav {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: 0;
+  background-color: var(--color-bg-header);
+  z-index: 10;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 50px;
+  height: 100vh;
+  transform: translateX(102%);
+  transition: transform 0.3s;
+
+  @include mixins.tablet {
+    flex-direction: row;
+    justify-content: center;
+    align-items: start;
+    gap: 200px;
+    padding: 40px 0 0;
+  }
+
+  @include mixins.desktop {
+    position: static;
+    height: auto;
+    align-items: center;
+    gap: 100px;
+    padding: 0;
+    transform: translateX(0);
+  }
+}
+
+.visible-menu {
+  transform: translateX(0);
 }
 
 .container {
+  position: relative;
   max-width: var(--max-width-container);
   margin: auto;
   padding: 20px;
@@ -13,13 +52,19 @@
 
 .list {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  height: 100%;
   gap: 40px;
+
+  @include mixins.desktop {
+    flex-direction: row;
+    gap: 40px;
+  }
 }
 
 .buttons {
   display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 20px;
 
@@ -43,6 +88,14 @@
       transform: translateY(3px);
     }
   }
+
+  @include mixins.tablet {
+    align-items: flex-end;
+  }
+
+  @include mixins.desktop {
+    flex-direction: row;
+  }
 }
 
 .link {
@@ -59,4 +112,23 @@
 
 .active {
   border-color: var(--color-black);
+}
+
+.open-btn {
+  display: flex;
+  padding: 5px;
+  border-radius: 10px;
+  transition: background-color 0.4s;
+
+  &:hover {
+    background-color: var(--color-bg-btn-hover);
+  }
+
+  @include mixins.desktop {
+    display: none;
+  }
+}
+
+.no-scroll {
+  overflow: hidden;
 }
