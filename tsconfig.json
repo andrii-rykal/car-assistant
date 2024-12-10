@@ -4,9 +4,7 @@
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
   ],
-  "compilerOptions": {
-    "incremental": true,
-    "tsBuildInfoFile": "./.tsbuildinfo",
+  "compilerOptions": {    
     "moduleResolution": "node",
     "esModuleInterop": true,
     "resolveJsonModule": true,
