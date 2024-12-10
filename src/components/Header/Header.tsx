@@ -92,7 +92,7 @@ export const Header = () => {
                 className={getLinkClass}
                 onClick={getCloseMenu}
               >
-                Допомога
+                Допомога  
               </NavLink>
             </li>
           </ul>
