@@ -1,5 +1,5 @@
 import { Link, NavLink } from 'react-router-dom';
-import clsx from 'clsx';
+import {clsx} from 'clsx';
 import styles from './Header.module.scss';
 import { Image } from '../../components';
 import { useEffect, useState } from 'react';
