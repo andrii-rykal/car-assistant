@@ -8,6 +8,7 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "resolveJsonModule": true,
+    "module": "ESNext",
     "allowSyntheticDefaultImports": true
   }
 }

@@ -1,0 +1,22 @@
+.loginPage {
+  @include mixins.container;
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px 0;
+}
+
+.login,
+.password {
+  border: 1px solid var(--color-bg-header);
+  outline-color: var(--color-bg-btn-hover);
+}
+
+.password {}
+
+.form {
+  @include mixins.loginForm;
+}
+
+.form .submit-btn {
+  width: max-content;
+}

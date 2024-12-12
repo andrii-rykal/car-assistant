@@ -1,11 +1,11 @@
-import React from 'react';
 import styles from './TemplateName.module.scss';
+import React, { FC } from 'react';
 
 export interface TemplateNameProps {
-  '0': '',
+  '0'?: '',
 }
 
-export const TemplateName: React.FC<TemplateNameProps> = () => (
+export const TemplateName: FC<TemplateNameProps> = () => (
   <div className={styles.templateName}>
     TemplateName Component
   </div>

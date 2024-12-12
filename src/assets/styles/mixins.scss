@@ -9,3 +9,18 @@
     @content;
   }
 }
+
+@mixin container {
+  max-width: var(--max-width-container);
+  margin: 0 auto;
+}
+
+@mixin loginForm {
+  border: 1px solid var(--color-bg-header);
+  border-radius: 10px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  align-items: center;
+}

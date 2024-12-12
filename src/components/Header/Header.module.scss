@@ -41,9 +41,8 @@
 }
 
 .container {
+  @include mixins.container;
   position: relative;
-  max-width: var(--max-width-container);
-  margin: auto;
   padding: 20px;
   display: flex;
   align-items: center;
@@ -66,28 +65,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
-
-  & button {
-    font-size: 18px;
-    padding: 8px 16px;
-    background-color: var(--color-bg-btn);
-    border-radius: 10px;
-    box-shadow: 0 4px 0 var(--color-shadow-btn);
-    transition:
-      background-color 0.4s,
-      box-shadow 0.3s,
-      transform 0.3s;
-
-    &:hover {
-      background-color: var(--color-bg-btn-hover);
-    }
-
-    &:active {
-      box-shadow: 0 1px 0;
-      transform: translateY(3px);
-    }
-  }
+  gap: 20px;  
 
   @include mixins.tablet {
     align-items: flex-end;
@@ -96,6 +74,10 @@
   @include mixins.desktop {
     flex-direction: row;
   }
+}
+
+.login-btn {
+  
 }
 
 .link {
@@ -114,14 +96,20 @@
   border-color: var(--color-black);
 }
 
-.open-btn {
+.container .open-btn {
   display: flex;
   padding: 5px;
-  border-radius: 10px;
+  background-color: transparent;
+  box-shadow: none;
   transition: background-color 0.4s;
 
   &:hover {
     background-color: var(--color-bg-btn-hover);
+  }
+
+  &:active {
+    box-shadow: none;
+    transform: translateY(0);
   }
 
   @include mixins.desktop {

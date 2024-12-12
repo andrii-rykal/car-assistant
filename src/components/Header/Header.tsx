@@ -1,21 +1,36 @@
-import { Link, NavLink } from 'react-router-dom';
-import {clsx} from 'clsx';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { clsx } from 'clsx';
 import styles from './Header.module.scss';
 import { Image } from '../../components';
 import { useEffect, useState } from 'react';
+import { Button } from '../Button';
 
 const getLinkClass = ({ isActive }: { isActive: boolean }) =>
   clsx(styles.link, {
     [styles.active]: isActive,
   });
+const getLinkStyle = ({ isActive }: { isActive: boolean }) => ({
+  color: isActive ? '#3a5c5c' : '',
+});
 
 export const Header = () => {
   const [isOpenMenu, setIsOpenMenu] = useState(true);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const navigate = useNavigate();
 
   const getCloseMenu = () => {
     setIsOpenMenu(true);
   };
+
+  const handleRegister = () => {
+    navigate('register');
+    getCloseMenu();
+  }
+
+  const handleLogin = () => {
+    navigate('login');
+    getCloseMenu();
+  }
 
   useEffect(() => {
     if (!isOpenMenu) {
@@ -51,12 +66,11 @@ export const Header = () => {
         <Link to="/" onClick={getCloseMenu}>
           <img src="" alt="Logo" />
         </Link>
-        <button
-          onClick={() => setIsOpenMenu(!isOpenMenu)}
+        <Button
+          text={isOpenMenu ? <Image.MenuOpen /> : <Image.MenuClose />}
           className={styles.openBtn}
-        >
-          {isOpenMenu ? <Image.MenuOpen /> : <Image.MenuClose />}
-        </button>
+          onClick={() => setIsOpenMenu(!isOpenMenu)}
+        />
         <nav
           className={clsx(styles.nav, {
             [styles.visibleMenu]: !isOpenMenu,
@@ -64,7 +78,12 @@ export const Header = () => {
         >
           <ul className={styles.list}>
             <li>
-              <NavLink to="/" className={getLinkClass} onClick={getCloseMenu}>
+              <NavLink
+                to="/"
+                className={getLinkClass}
+                style={getLinkStyle}
+                onClick={getCloseMenu}
+              >
                 Домашня
               </NavLink>
             </li>
@@ -72,6 +91,7 @@ export const Header = () => {
               <NavLink
                 to="/about"
                 className={getLinkClass}
+                style={getLinkStyle}
                 onClick={getCloseMenu}
               >
                 Про додаток
@@ -81,6 +101,7 @@ export const Header = () => {
               <NavLink
                 to="/contacts"
                 className={getLinkClass}
+                style={getLinkStyle}
                 onClick={getCloseMenu}
               >
                 Контакти
@@ -90,15 +111,24 @@ export const Header = () => {
               <NavLink
                 to="/help"
                 className={getLinkClass}
+                style={getLinkStyle}
                 onClick={getCloseMenu}
               >
-                Допомога  
+                Допомога
               </NavLink>
             </li>
           </ul>
           <div className={styles.buttons}>
-            <button>Реєстрація</button>
-            <button>Логін</button>
+            <Button
+              className={styles.loginBtn}
+              text="Реєстрація"
+              onClick={handleRegister}
+            />
+            <Button
+              className={styles.loginBtn}
+              text="Логін"
+              onClick={handleLogin}
+            />
           </div>
         </nav>
       </div>
