@@ -4,6 +4,8 @@ import styles from './Header.module.scss';
 import { Image } from '../../components';
 import { useEffect, useState } from 'react';
 import { Button } from '../Button';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { logout } from '../../features/authSlice';
 
 const getLinkClass = ({ isActive }: { isActive: boolean }) =>
   clsx(styles.link, {
@@ -16,6 +18,8 @@ const getLinkStyle = ({ isActive }: { isActive: boolean }) => ({
 export const Header = () => {
   const [isOpenMenu, setIsOpenMenu] = useState(true);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const { token } = useAppSelector(state => state.auth);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const getCloseMenu = () => {
@@ -28,6 +32,12 @@ export const Header = () => {
   }
 
   const handleLogin = () => {
+    navigate('login');
+    getCloseMenu();
+  }
+
+  const handleLogout = () => {
+    dispatch(logout())
     navigate('login');
     getCloseMenu();
   }
@@ -118,7 +128,8 @@ export const Header = () => {
               </NavLink>
             </li>
           </ul>
-          <div className={styles.buttons}>
+          {!token ? (
+            <div className={styles.buttons}>
             <Button
               className={styles.loginBtn}
               text="Реєстрація"
@@ -130,6 +141,9 @@ export const Header = () => {
               onClick={handleLogin}
             />
           </div>
+          ) : (
+              <Button text="Logout" onClick={handleLogout} />
+          )}
         </nav>
       </div>
     </div>

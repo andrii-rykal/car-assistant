@@ -9,6 +9,8 @@ import { store } from './app/store';
 import { App } from './App';
 import { RegistrationPage } from './pages/RegistrationPage';
 import { LoginPage } from './pages/LoginPage';
+import { PrivateRoute } from './components/PrivateRoute';
+import { DashboardPage } from './pages/DashboardPage';
 
 export const Root = () => (
   <StrictMode>
@@ -22,7 +24,10 @@ export const Root = () => (
             <Route path="help" element={<HelpPage />} />
             <Route path="register" element={<RegistrationPage />} />
             <Route path="login" element={<LoginPage />} />
-            <Route path='*' element={<p>Not found page</p>} />
+            <Route path='/' element={<PrivateRoute />} >
+              <Route path="/dashboard" element={<DashboardPage />} />
+            </Route>
+            <Route path="*" element={<p>Not found page</p>} />
           </Route>
         </Routes>
       </Provider>
