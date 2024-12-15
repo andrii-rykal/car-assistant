@@ -1,20 +1,26 @@
 import { useForm } from 'react-hook-form';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { clsx } from 'clsx';
+import { IoEyeOutline, IoEyeOffOutline } from 'react-icons/io5';
+
 import styles from './RegistrationPage.module.scss';
 import { Button } from '../../components/Button';
 import { RegistrationData } from '../../types';
 import { registerUser } from '../../features/registerSlice';
+import { useState } from 'react';
 
 export const RegistrationPage = () => {
   const dispatch = useAppDispatch();
   const { isLoading, error, success } = useAppSelector(
     state => state.registration,
   );
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm<RegistrationData>({
     mode: 'onSubmit',
@@ -22,6 +28,14 @@ export const RegistrationPage = () => {
 
   const onSubmit = (data: RegistrationData) => {
     dispatch(registerUser(data));
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
   };
 
   return (
@@ -37,7 +51,9 @@ export const RegistrationPage = () => {
               message: 'Name must be at least 3 characters',
             },
           })}
-          className={clsx(styles.firstName, { [styles.error]: errors.firstName })}
+          className={clsx(styles.firstName, {
+            [styles.error]: errors.firstName,
+          })}
         />
         {errors.firstName && <p>{errors.firstName.message}</p>}
         <input
@@ -66,33 +82,49 @@ export const RegistrationPage = () => {
           className={clsx(styles.email, { [styles.error]: errors.email })}
         />
         {errors.email && <p>{errors.email.message}</p>}
-        <input
-          type="password"
-          placeholder="Password"
-          {...register('password', {
-            required: 'Password is required',
-            minLength: {
-              value: 6,
-              message: 'Password must be at least 6 characters',
-            },
-          })}
-          className={clsx(styles.password, { [styles.error]: errors.password })}
-        />
+        <div className={styles.inputBox}>
+          <input
+            type={showPassword ? 'text' : 'password'}
+            placeholder="Password"
+            {...register('password', {
+              required: 'Password is required',
+              minLength: {
+                value: 6,
+                message: 'Password must be at least 6 characters',
+              },
+            })}
+            className={clsx(styles.password, { [styles.error]: errors.password })}
+          />
+          <button
+              type="button"
+              className={styles.eye}
+              onClick={togglePasswordVisibility}
+            >
+              {showPassword ? <IoEyeOutline size={20} /> : <IoEyeOffOutline size={20} />}
+            </button>
+        </div>
         {errors.password && <p>{errors.password.message}</p>}
-        <input
-          type="password"
-          placeholder="Confirm Password"
-          {...register('confirmPassword', {
-            required: 'Password is required',
-            minLength: {
-              value: 6,
-              message: 'Password must be at least 6 characters',
-            },
-          })}
-          className={clsx(styles.confirmPassword, {
-            [styles.error]: errors.confirmPassword,
-          })}
-        />
+        <div className={styles.inputBox}>
+          <input
+            type={showConfirmPassword ? 'text' : 'password'}
+            placeholder="Confirm Password"
+            {...register('confirmPassword', {
+              required: 'Confirm Password is required',
+              validate: value =>
+                value === getValues('password') || 'Passwords do not match',
+            })}
+            className={clsx(styles.confirmPassword, {
+              [styles.error]: errors.confirmPassword,
+            })}
+          />
+          <button
+              type="button"
+              className={styles.eye}
+              onClick={toggleConfirmPasswordVisibility}
+            >
+              {showConfirmPassword ? <IoEyeOutline size={20} /> : <IoEyeOffOutline size={20} />}
+            </button>
+        </div>
         {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
         <Button type="submit" text="Sign up" className={styles.submitBtn} />
         {isLoading && <span>Loading...</span>}

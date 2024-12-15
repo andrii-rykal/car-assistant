@@ -35,9 +35,7 @@ export const login = createAsyncThunk<
       throw new Error('Invalid credentials');
     }
 
-    const data = await response.json();
-
-    return data;
+    return await response.json();
   } catch (error: unknown) {
     return rejectWithValue((error as Error).message);
   }
