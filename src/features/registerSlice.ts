@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RegistrationData } from '../types';
 
+// const BASE_URL = 'https://car-assistant-app-production.up.railway.app/api'
+
 interface RegistrationState {
   isLoading: boolean;
   error: string | null;
@@ -17,11 +19,16 @@ export const registerUser = createAsyncThunk(
   'registration/registerUser',
   async (userData: RegistrationData, { rejectWithValue }) => {
     try {
-      const response = await fetch('api/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(userData),
-      });
+      const response = await fetch(
+        'https://car-assistant-app-production.up.railway.app/api/auth/registration',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(userData),
+        },
+      );
 
       if (!response.ok) {
         throw new Error('Registration failed. Please try again.');

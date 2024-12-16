@@ -1,9 +1,7 @@
 // export { default as MainSlide1 } from './MainSlide1';
-export { MainSlide1 } from './MainSlide1';
-export { MainSlide2 } from './MainSlide2';
-export { MainSlide3 } from './MainSlide3';
-export { MainSlide4 } from './MainSlide4';
-export { MenuOpen } from './MenuOpen';
-export { MenuClose } from './MenuClose';
-export * from './EyePassword';
-export * from './EyePasswordOff';
+export * from './MainSlide1';
+export * from './MainSlide2';
+export * from './MainSlide3';
+export * from './MainSlide4';
+export * from './MenuOpen';
+export * from './MenuClose';

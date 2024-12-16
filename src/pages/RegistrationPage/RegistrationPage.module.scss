@@ -9,7 +9,7 @@
 .last-name,
 .email,
 .password,
-.confirm-password {
+.repeat-password {
   @include mixins.input;
 }
 

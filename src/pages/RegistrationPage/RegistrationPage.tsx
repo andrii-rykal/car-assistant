@@ -15,7 +15,7 @@ export const RegistrationPage = () => {
     state => state.registration,
   );
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showRepeatPassword, setShowRepeatPassword] = useState(false);
 
   const {
     register,
@@ -28,6 +28,7 @@ export const RegistrationPage = () => {
 
   const onSubmit = (data: RegistrationData) => {
     dispatch(registerUser(data));
+    console.log(data);
   };
 
   const togglePasswordVisibility = () => {
@@ -35,7 +36,7 @@ export const RegistrationPage = () => {
   };
 
   const toggleConfirmPasswordVisibility = () => {
-    setShowConfirmPassword(!showConfirmPassword);
+    setShowRepeatPassword(!showRepeatPassword);
   };
 
   return (
@@ -79,7 +80,7 @@ export const RegistrationPage = () => {
               message: 'Invalid email format',
             },
           })}
-          autoComplete='username'
+          autoComplete="username"
           className={clsx(styles.email, { [styles.error]: errors.email })}
         />
         {errors.email && <p>{errors.email.message}</p>}
@@ -95,40 +96,50 @@ export const RegistrationPage = () => {
               },
             })}
             autoComplete="new-password"
-            className={clsx(styles.password, { [styles.error]: errors.password })}
+            className={clsx(styles.password, {
+              [styles.error]: errors.password,
+            })}
           />
           <button
-              type="button"
-              className={styles.eye}
-              onClick={togglePasswordVisibility}
-            >
-              {showPassword ? <IoEyeOutline size={20} /> : <IoEyeOffOutline size={20} />}
-            </button>
+            type="button"
+            className={styles.eye}
+            onClick={togglePasswordVisibility}
+          >
+            {showPassword ? (
+              <IoEyeOutline size={20} />
+            ) : (
+              <IoEyeOffOutline size={20} />
+            )}
+          </button>
         </div>
         {errors.password && <p>{errors.password.message}</p>}
         <div className={styles.inputBox}>
           <input
-            type={showConfirmPassword ? 'text' : 'password'}
-            placeholder="Confirm Password"
-            {...register('confirmPassword', {
-              required: 'Confirm Password is required',
+            type={showRepeatPassword ? 'text' : 'password'}
+            placeholder="Repeat Password"
+            {...register('repeatPassword', {
+              required: 'Repeat Password is required',
               validate: value =>
                 value === getValues('password') || 'Passwords do not match',
             })}
             autoComplete="new-password"
-            className={clsx(styles.confirmPassword, {
-              [styles.error]: errors.confirmPassword,
+            className={clsx(styles.repeatPassword, {
+              [styles.error]: errors.repeatPassword,
             })}
           />
           <button
-              type="button"
-              className={styles.eye}
-              onClick={toggleConfirmPasswordVisibility}
-            >
-              {showConfirmPassword ? <IoEyeOutline size={20} /> : <IoEyeOffOutline size={20} />}
-            </button>
+            type="button"
+            className={styles.eye}
+            onClick={toggleConfirmPasswordVisibility}
+          >
+            {showRepeatPassword ? (
+              <IoEyeOutline size={20} />
+            ) : (
+              <IoEyeOffOutline size={20} />
+            )}
+          </button>
         </div>
-        {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
+        {errors.repeatPassword && <p>{errors.repeatPassword.message}</p>}
         <Button type="submit" text="Sign up" className={styles.submitBtn} />
         {isLoading && <span>Loading...</span>}
         {error && <p>{error}</p>}
