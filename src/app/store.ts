@@ -1,11 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
-// import countReducer from '../features/count';
 import authReducer from '../features/authSlice';
 import registerReducer from '../features/registerSlice';
 
 export const store = configureStore({
   reducer: {
-    // count: countReducer,
     auth: authReducer,
     registration: registerReducer
   },
