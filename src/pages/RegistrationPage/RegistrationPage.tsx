@@ -79,6 +79,7 @@ export const RegistrationPage = () => {
               message: 'Invalid email format',
             },
           })}
+          autoComplete='username'
           className={clsx(styles.email, { [styles.error]: errors.email })}
         />
         {errors.email && <p>{errors.email.message}</p>}
@@ -93,6 +94,7 @@ export const RegistrationPage = () => {
                 message: 'Password must be at least 6 characters',
               },
             })}
+            autoComplete="new-password"
             className={clsx(styles.password, { [styles.error]: errors.password })}
           />
           <button
@@ -113,6 +115,7 @@ export const RegistrationPage = () => {
               validate: value =>
                 value === getValues('password') || 'Passwords do not match',
             })}
+            autoComplete="new-password"
             className={clsx(styles.confirmPassword, {
               [styles.error]: errors.confirmPassword,
             })}
