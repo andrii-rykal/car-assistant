@@ -23,7 +23,7 @@ export const RegistrationPage = () => {
     getValues,
     formState: { errors },
   } = useForm<RegistrationData>({
-    mode: 'onSubmit',
+    mode: 'onChange',
   });
 
   const onSubmit = (data: RegistrationData) => {
@@ -56,7 +56,7 @@ export const RegistrationPage = () => {
             [styles.error]: errors.firstName,
           })}
         />
-        {errors.firstName && <p>{errors.firstName.message}</p>}
+        <p>{errors.firstName ? errors.firstName.message : ''}</p>
         <input
           type="text"
           placeholder="Last Name"
@@ -69,7 +69,7 @@ export const RegistrationPage = () => {
           })}
           className={clsx(styles.lastName, { [styles.error]: errors.lastName })}
         />
-        {errors.lastName && <p>{errors.lastName.message}</p>}
+        <p>{errors.lastName ? errors.lastName.message : ''}</p>
         <input
           type="text"
           placeholder="Email"
@@ -83,16 +83,40 @@ export const RegistrationPage = () => {
           autoComplete="username"
           className={clsx(styles.email, { [styles.error]: errors.email })}
         />
-        {errors.email && <p>{errors.email.message}</p>}
+        <p>{errors.email ? errors.email.message : ''}</p>
+
         <div className={styles.inputBox}>
           <input
             type={showPassword ? 'text' : 'password'}
             placeholder="Password"
             {...register('password', {
               required: 'Password is required',
-              minLength: {
-                value: 6,
-                message: 'Password must be at least 6 characters',
+              validate: {
+                hasUpperCase: value =>
+                  /[A-Z]/.test(value) ||
+                  'Password must include at least one uppercase letter',
+                hasLowerCase: value =>
+                  /[a-z]/.test(value) ||
+                  'Password must include at least one lowercase letter',
+                hasNumber: value =>
+                  /\d/.test(value) ||
+                  'Password must include at least one number',
+                hasSpecialChar: value =>
+                  /[!@#$%^&*(),.?":{}|<>]/.test(value) ||
+                  'Password must include at least one special character',
+                minLength: value =>
+                  value.length >= 8 ||
+                  'Password must be at least 8 characters long',
+                // maxLength: value =>
+                //   value.length >= 35 || 'Password must be no more than 35 characters long',
+              },
+              // pattern: {
+              //   value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~`])[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~`]+$/,
+              //   message: 'Password must contain special character'
+              // },
+              maxLength: {
+                value: 35,
+                message: 'Password must be no more than 35 characters long',
               },
             })}
             autoComplete="new-password"
@@ -112,7 +136,7 @@ export const RegistrationPage = () => {
             )}
           </button>
         </div>
-        {errors.password && <p>{errors.password.message}</p>}
+        <p>{errors.password ? errors.password.message : ''}</p>
         <div className={styles.inputBox}>
           <input
             type={showRepeatPassword ? 'text' : 'password'}
@@ -139,7 +163,7 @@ export const RegistrationPage = () => {
             )}
           </button>
         </div>
-        {errors.repeatPassword && <p>{errors.repeatPassword.message}</p>}
+        <p>{errors.repeatPassword ? errors.repeatPassword.message : ''}</p>
         <Button type="submit" text="Sign up" className={styles.submitBtn} />
         {isLoading && <span>Loading...</span>}
         {error && <p>{error}</p>}

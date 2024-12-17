@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RegistrationData } from '../types';
+import { createUser } from '../api/createUser';
+import { AxiosError } from 'axios';
 
 // const BASE_URL = 'https://car-assistant-app-production.up.railway.app/api'
 
@@ -15,28 +17,19 @@ const initialState: RegistrationState = {
   success: false,
 };
 
-export const registerUser = createAsyncThunk(
+export const registerUser = createAsyncThunk<
+  void,
+  RegistrationData,
+  { rejectValue: string }
+  >(
   'registration/registerUser',
   async (userData: RegistrationData, { rejectWithValue }) => {
     try {
-      const response = await fetch(
-        'https://car-assistant-app-production.up.railway.app/api/auth/registration',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(userData),
-        },
-      );
-
-      if (!response.ok) {
-        throw new Error('Registration failed. Please try again.');
-      }
-
-      return await response.json();
+      await createUser(userData);
     } catch (error: unknown) {
-      return rejectWithValue((error as Error).message);
+      const err = error as AxiosError<{ message: string }>;
+
+      return rejectWithValue(err.response?.data?.message || 'Registration failed. Please try again.');
     }
   },
 );

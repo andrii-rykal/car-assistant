@@ -1,26 +1,26 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface UserType {
-  id: string;
-  name: string;
-}
+// interface UserType {
+//   id: string;
+//   name: string;
+// }
 
 interface AuthState {
-  user: null | UserType;
+  // user: null | UserType;
   token: null | string;
   isLoading: boolean;
   error: null | string;
 }
 
 const initialState: AuthState = {
-  user: null,
+  // user: null,
   token: null,
   isLoading: false,
   error: null,
 };
 
 export const login = createAsyncThunk<
-  { user: UserType; token: string },
+  { token: string },
   { email: string; password: string },
   { rejectValue: string }
 >('auth/login', async (credentials, { rejectWithValue }) => {
@@ -46,7 +46,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     logout: state => {
-      state.user = null;
+      // state.user = null;
       state.token = null;
     },
   },
@@ -58,9 +58,9 @@ const authSlice = createSlice({
       })
       .addCase(
         login.fulfilled,
-        (state, action: PayloadAction<{ user: UserType; token: string }>) => {
+        (state, action: PayloadAction<{ token: string }>) => {
           state.isLoading = false;
-          state.user = action.payload.user;
+          // state.user = action.payload.user;
           state.token = action.payload.token;
         },
       )

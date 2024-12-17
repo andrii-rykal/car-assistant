@@ -22,7 +22,7 @@ export const LoginPage = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>({
-    mode: 'onSubmit',
+    mode: 'onChange',
   });
 
   const onSubmit = (data: FormData) => {
@@ -48,17 +48,17 @@ export const LoginPage = () => {
           })}
           className={clsx(styles.login, { [styles.error]: errors.email })}
         />
-        {errors.email && <p>{errors.email.message}</p>}
+        <p>{errors.email ? errors.email.message : ''}</p>
         <div className={styles.inputBox}>
           <input
             type={showPassword ? 'text' : 'password'}
             placeholder="Enter your password"
             {...register('password', {
               required: 'Password is required',
-              minLength: {
-                value: 6,
-                message: 'Password must be at least 6 characters',
-              },
+              // minLength: {
+              //   value: 8,
+              //   message: 'Password must be at least 8 characters',
+              // },
             })}
             className={clsx(styles.password, {
               [styles.error]: errors.password,
@@ -72,7 +72,8 @@ export const LoginPage = () => {
             {showPassword ? <IoEyeOutline size={20} /> : <IoEyeOffOutline size={20} />}
           </button>
         </div>
-        {errors.password && <p>{errors.password.message}</p>}
+        <p>{errors.password ? errors.password.message : ''}</p>
+
         <Button type="submit" text="Sign in" className={styles.submitBtn} />
         {auth.isLoading && <span>Loading...</span>}
         {auth.error && <p>{auth.error}</p>}
