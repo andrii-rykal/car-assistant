@@ -1,4 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { LoginData } from '../types';
+import { getToken } from '../api/getToken';
 
 // interface UserType {
 //   id: string;
@@ -21,23 +23,14 @@ const initialState: AuthState = {
 
 export const login = createAsyncThunk<
   { token: string },
-  { email: string; password: string },
+  LoginData,
   { rejectValue: string }
 >('auth/login', async (credentials, { rejectWithValue }) => {
   try {
-    const response = await fetch('api/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(credentials),
-    });
-
-    if (!response.ok) {
-      throw new Error('Invalid credentials');
-    }
-
-    return await response.json();
+    const response = await getToken(credentials);
+    return response.data;
   } catch (error: unknown) {
-    return rejectWithValue((error as Error).message);
+    return rejectWithValue((error as Error).message || 'Login failed');
   }
 });
 

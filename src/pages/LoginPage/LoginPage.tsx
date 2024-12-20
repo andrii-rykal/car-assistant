@@ -5,33 +5,44 @@ import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import styles from './LoginPage.module.scss';
 import { Button } from '../../components/Button';
 import { login } from '../../features/authSlice';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { LoginData } from '../../types';
+import { useNavigate } from 'react-router-dom';
 
-interface FormData {
-  email: string;
-  password: string;
-}
+// interface FormData {
+//   email: string;
+//   password: string;
+// }
 
 export const LoginPage = () => {
   const dispatch = useAppDispatch();
-  const auth = useAppSelector(state => state.auth);
+  const {token, isLoading, error} = useAppSelector(state => state.auth);
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
-  } = useForm<FormData>({
+  } = useForm<LoginData>({
     mode: 'onChange',
   });
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = (data: LoginData) => {
     dispatch(login(data));
   };
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+
+  useEffect(() => {
+    if (token) {
+      reset();
+      navigate('/dashboard')
+    }
+  }, [navigate, reset, token])
 
   return (
     <div className={styles.loginPage}>
@@ -75,8 +86,8 @@ export const LoginPage = () => {
         <p>{errors.password ? errors.password.message : ''}</p>
 
         <Button type="submit" text="Sign in" className={styles.submitBtn} />
-        {auth.isLoading && <span>Loading...</span>}
-        {auth.error && <p>{auth.error}</p>}
+        {isLoading && <span>Loading...</span>}
+        {error && <p>{error}</p>}
       </form>
     </div>
   );

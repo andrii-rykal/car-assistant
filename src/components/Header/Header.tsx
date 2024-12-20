@@ -127,6 +127,18 @@ export const Header = () => {
                 Допомога
               </NavLink>
             </li>
+            {token && (
+              <li>
+              <NavLink
+                to="/dashboard"
+                className={getLinkClass}
+                style={getLinkStyle}
+                onClick={getCloseMenu}
+              >
+                Кабінет
+              </NavLink>
+            </li>
+            )}
           </ul>
           {!token ? (
             <div className={styles.buttons}>

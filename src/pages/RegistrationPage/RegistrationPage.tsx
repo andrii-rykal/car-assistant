@@ -2,25 +2,28 @@ import { useForm } from 'react-hook-form';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { clsx } from 'clsx';
 import { IoEyeOutline, IoEyeOffOutline } from 'react-icons/io5';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import styles from './RegistrationPage.module.scss';
 import { Button } from '../../components/Button';
 import { RegistrationData } from '../../types';
 import { registerUser } from '../../features/registerSlice';
-import { useState } from 'react';
 
 export const RegistrationPage = () => {
   const dispatch = useAppDispatch();
-  const { isLoading, error, success } = useAppSelector(
+  const { isLoading, error, success, user } = useAppSelector(
     state => state.registration,
   );
   const [showPassword, setShowPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
+  const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
     getValues,
+    reset,
     formState: { errors },
   } = useForm<RegistrationData>({
     mode: 'onChange',
@@ -31,6 +34,13 @@ export const RegistrationPage = () => {
     console.log(data);
   };
 
+  useEffect(() => {
+    if (success && user) {
+      navigate('/login')
+      reset();
+    }
+  }, [navigate, reset, success, user]);
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -38,6 +48,10 @@ export const RegistrationPage = () => {
   const toggleConfirmPasswordVisibility = () => {
     setShowRepeatPassword(!showRepeatPassword);
   };
+
+  // if (user) {
+  //   <Navigate to='/login' />
+  // }
 
   return (
     <div className={styles.registrationPage}>
@@ -130,9 +144,9 @@ export const RegistrationPage = () => {
             onClick={togglePasswordVisibility}
           >
             {showPassword ? (
-              <IoEyeOutline size={20} />
+              <IoEyeOutline size={24} />
             ) : (
-              <IoEyeOffOutline size={20} />
+              <IoEyeOffOutline size={24} />
             )}
           </button>
         </div>
@@ -157,9 +171,9 @@ export const RegistrationPage = () => {
             onClick={toggleConfirmPasswordVisibility}
           >
             {showRepeatPassword ? (
-              <IoEyeOutline size={20} />
+              <IoEyeOutline size={24} />
             ) : (
-              <IoEyeOffOutline size={20} />
+              <IoEyeOffOutline size={24} />
             )}
           </button>
         </div>
@@ -169,6 +183,7 @@ export const RegistrationPage = () => {
         {error && <p>{error}</p>}
         {success && <p style={{ color: 'green' }}>Registration successful!</p>}
       </form>
+      {user?.email}
     </div>
   );
 };
