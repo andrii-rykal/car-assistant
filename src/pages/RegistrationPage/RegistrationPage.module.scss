@@ -14,17 +14,7 @@
 }
 
 .form {
-  width: 320px;
-  border: 1px solid var(--color-bg-header);
-  border-radius: 10px;
-  padding: 30px 20px;
-  display: flex;
-  flex-direction: column;
-
-  & p {
-    color: red;
-    height: 40px;
-  }
+  @include mixins.form;
 
   @include mixins.tablet {
     width: 400px;

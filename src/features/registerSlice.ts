@@ -3,8 +3,6 @@ import { RegistrationData, UserResponse } from '../types';
 import { createUser } from '../api/createUser';
 import { AxiosError } from 'axios';
 
-// const BASE_URL = 'https://car-assistant-app-production.up.railway.app/api'
-
 interface RegistrationState {
   isLoading: boolean;
   error: string | null;

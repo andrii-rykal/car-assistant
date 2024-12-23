@@ -11,6 +11,10 @@ import { RegistrationPage } from './pages/RegistrationPage';
 import { LoginPage } from './pages/LoginPage';
 import { PrivateRoute } from './components/PrivateRoute';
 import { DashboardPage } from './pages/DashboardPage';
+import { JournalPage } from './pages/JournalPage';
+import { GasPage } from './pages/GasPage';
+import { ReminderPage } from './pages/ReminderPage';
+import { StatisticsPage } from './pages/StatisticsPage';
 
 export const Root = () => (
   <StrictMode>
@@ -24,10 +28,21 @@ export const Root = () => (
             <Route path="help" element={<HelpPage />} />
             <Route path="register" element={<RegistrationPage />} />
             <Route path="login" element={<LoginPage />} />
-            <Route path='/' element={<PrivateRoute />} >
-              <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/" element={<PrivateRoute />}>
+              {/* <Route path="dashboard" element={<DashboardPage />}>
+                <Route path="journal" element={<JournalPage />} />
+                <Route path="gas" element={<GasPage />} />
+                <Route path="reminder" element={<ReminderPage />} />
+                <Route path="statistics" element={<StatisticsPage />} />
+              </Route> */}
             </Route>
             <Route path="*" element={<p>Not found page</p>} />
+            <Route path="dashboard" element={<DashboardPage />}>
+              <Route path="journal" element={<JournalPage />} />
+              <Route path="gas" element={<GasPage />} />
+              <Route path="reminder" element={<ReminderPage />} />
+              <Route path="statistics" element={<StatisticsPage />} />
+            </Route>
           </Route>
         </Routes>
       </Provider>

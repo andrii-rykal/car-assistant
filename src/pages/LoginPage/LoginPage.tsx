@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { clsx } from 'clsx';
-import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
+import { IoEyeOutline, IoEyeOffOutline } from 'react-icons/io5';
 import styles from './LoginPage.module.scss';
 import { Button } from '../../components/Button';
 import { login } from '../../features/authSlice';
@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router-dom';
 
 export const LoginPage = () => {
   const dispatch = useAppDispatch();
-  const {token, isLoading, error} = useAppSelector(state => state.auth);
+  const { token, isLoading, error } = useAppSelector(state => state.auth);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
@@ -40,9 +40,9 @@ export const LoginPage = () => {
   useEffect(() => {
     if (token) {
       reset();
-      navigate('/dashboard')
+      navigate('/dashboard');
     }
-  }, [navigate, reset, token])
+  }, [navigate, reset, token]);
 
   return (
     <div className={styles.loginPage}>
@@ -50,12 +50,13 @@ export const LoginPage = () => {
         <input
           type="text"
           placeholder="Enter your email"
+          autoComplete="user-name"
           {...register('email', {
             required: 'Email is required',
             pattern: {
               value: /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)+[\w-]{2,66})$/i,
               message: 'Invalid email format',
-            },
+            }, 
           })}
           className={clsx(styles.login, { [styles.error]: errors.email })}
         />
@@ -64,12 +65,9 @@ export const LoginPage = () => {
           <input
             type={showPassword ? 'text' : 'password'}
             placeholder="Enter your password"
+            autoComplete="current-password"
             {...register('password', {
               required: 'Password is required',
-              // minLength: {
-              //   value: 8,
-              //   message: 'Password must be at least 8 characters',
-              // },
             })}
             className={clsx(styles.password, {
               [styles.error]: errors.password,
@@ -80,7 +78,11 @@ export const LoginPage = () => {
             className={styles.eye}
             onClick={togglePasswordVisibility}
           >
-            {showPassword ? <IoEyeOutline size={20} /> : <IoEyeOffOutline size={20} />}
+            {showPassword ? (
+              <IoEyeOutline size={24} />
+            ) : (
+              <IoEyeOffOutline size={24} />
+            )}
           </button>
         </div>
         <p>{errors.password ? errors.password.message : ''}</p>

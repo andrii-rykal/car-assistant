@@ -1,0 +1,62 @@
+.name-car {
+  width: max-content;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  background-color: var(--color-bg-header);
+}
+
+.add-car-btn {
+  background-color: var(--color-bg-btn);
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.brand,
+.model,
+.year,
+.vin,
+.purchase-date {
+  @include mixins.input;
+  padding-right: 8px;
+}
+
+.form {
+  @include mixins.form;
+  @include mixins.tablet {
+    width: 400px;
+  }
+}
+
+.error {
+  border-color: red;
+}
+
+.btn {
+  width: max-content;
+  margin: 0 0 10px;
+  
+}
+
+.form-bg {
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0,0,0,0.5);
+  // overflow-y: auto;
+}
+
+.select {
+  padding: 8px;
+  font-size: 18px;
+  border: none;
+  outline: none;
+  border-radius: 10px;
+}

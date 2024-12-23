@@ -49,10 +49,6 @@ export const RegistrationPage = () => {
     setShowRepeatPassword(!showRepeatPassword);
   };
 
-  // if (user) {
-  //   <Navigate to='/login' />
-  // }
-
   return (
     <div className={styles.registrationPage}>
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
@@ -64,7 +60,7 @@ export const RegistrationPage = () => {
             minLength: {
               value: 3,
               message: 'Name must be at least 3 characters',
-            },
+            }, 
           })}
           className={clsx(styles.firstName, {
             [styles.error]: errors.firstName,

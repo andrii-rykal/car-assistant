@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { Button } from '../Button';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { logout } from '../../features/authSlice';
+import { resetState } from '../../features/registerSlice';
 
 const getLinkClass = ({ isActive }: { isActive: boolean }) =>
   clsx(styles.link, {
@@ -38,6 +39,7 @@ export const Header = () => {
 
   const handleLogout = () => {
     dispatch(logout())
+    dispatch(resetState())
     navigate('login');
     getCloseMenu();
   }
@@ -127,7 +129,7 @@ export const Header = () => {
                 Допомога
               </NavLink>
             </li>
-            {token && (
+            {!token && (
               <li>
               <NavLink
                 to="/dashboard"
