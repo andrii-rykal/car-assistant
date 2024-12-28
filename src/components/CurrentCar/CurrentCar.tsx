@@ -10,7 +10,7 @@ import { creatingCar } from '../../features/addCarSlice';
 export const CurrentCar = () => {
   const dispatch = useAppDispatch();
   const { isLoading, error, success, newCar } = useAppSelector(
-    state => state.createCar,
+    state => state.addCar,
   );
   const [isAddingCar, setIsAddingCar] = useState(false);
   const [isSelectedDate, setIsSelectedDate] = useState(false);
