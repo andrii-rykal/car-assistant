@@ -14,7 +14,7 @@
   flex-direction: column;
   align-items: center;
   gap: 50px;
-  height: 100vh;
+  // height: 100vh;
   transform: translateX(102%);
   transition: transform 0.3s;
 
@@ -28,7 +28,7 @@
 
   @include mixins.desktop {
     position: static;
-    height: auto;
+    // height: auto;
     align-items: center;
     gap: 100px;
     padding: 0;
