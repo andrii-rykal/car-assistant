@@ -20,6 +20,7 @@ export const Header = () => {
   const [isOpenMenu, setIsOpenMenu] = useState(true);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const { token } = useAppSelector(state => state.auth);
+  const { user } = useAppSelector(state => state.registration);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -30,19 +31,19 @@ export const Header = () => {
   const handleRegister = () => {
     navigate('register');
     getCloseMenu();
-  }
+  };
 
   const handleLogin = () => {
     navigate('login');
     getCloseMenu();
-  }
+  };
 
   const handleLogout = () => {
-    dispatch(logout())
-    dispatch(resetState())
+    dispatch(logout());
+    dispatch(resetState());
     navigate('login');
     getCloseMenu();
-  }
+  };
 
   useEffect(() => {
     if (!isOpenMenu) {
@@ -129,34 +130,37 @@ export const Header = () => {
                 Допомога
               </NavLink>
             </li>
-            {!token && (
+            {token && (
               <li>
-              <NavLink
-                to="/dashboard"
-                className={getLinkClass}
-                style={getLinkStyle}
-                onClick={getCloseMenu}
-              >
-                Кабінет
-              </NavLink>
-            </li>
+                <NavLink
+                  to="/dashboard"
+                  className={getLinkClass}
+                  style={getLinkStyle}
+                  onClick={getCloseMenu}
+                >
+                  Кабінет
+                </NavLink>
+              </li>
             )}
           </ul>
           {!token ? (
             <div className={styles.buttons}>
-            <Button
-              className={styles.loginBtn}
-              text="Реєстрація"
-              onClick={handleRegister}
-            />
-            <Button
-              className={styles.loginBtn}
-              text="Логін"
-              onClick={handleLogin}
-            />
-          </div>
+              <Button
+                className={styles.loginBtn}
+                text="Реєстрація"
+                onClick={handleRegister}
+              />
+              <Button
+                className={styles.loginBtn}
+                text="Логін"
+                onClick={handleLogin}
+              />
+            </div>
           ) : (
+              <div className={styles.buttons}>
+                <p className={styles.userName}>{ user?.firstName }</p>
               <Button text="Logout" onClick={handleLogout} />
+            </div>
           )}
         </nav>
       </div>

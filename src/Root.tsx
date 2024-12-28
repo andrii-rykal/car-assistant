@@ -29,20 +29,20 @@ export const Root = () => (
             <Route path="register" element={<RegistrationPage />} />
             <Route path="login" element={<LoginPage />} />
             <Route path="/" element={<PrivateRoute />}>
-              {/* <Route path="dashboard" element={<DashboardPage />}>
+              <Route path="dashboard" element={<DashboardPage />}>
                 <Route path="journal" element={<JournalPage />} />
                 <Route path="gas" element={<GasPage />} />
                 <Route path="reminder" element={<ReminderPage />} />
                 <Route path="statistics" element={<StatisticsPage />} />
-              </Route> */}
+              </Route>
             </Route>
             <Route path="*" element={<p>Not found page</p>} />
-            <Route path="dashboard" element={<DashboardPage />}>
+            {/* <Route path="dashboard" element={<DashboardPage />}>
               <Route path="journal" element={<JournalPage />} />
               <Route path="gas" element={<GasPage />} />
               <Route path="reminder" element={<ReminderPage />} />
               <Route path="statistics" element={<StatisticsPage />} />
-            </Route>
+            </Route> */}
           </Route>
         </Routes>
       </Provider>

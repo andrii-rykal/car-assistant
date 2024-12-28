@@ -68,7 +68,7 @@
   gap: 20px;  
 
   @include mixins.tablet {
-    align-items: flex-end;
+    // align-items: flex-end;
   }
 
   @include mixins.desktop {
@@ -119,4 +119,9 @@
 
 .no-scroll {
   overflow: hidden;
+}
+
+.user-name {
+  font-size: 20px;
+  font-weight: bold;
 }

@@ -17,6 +17,7 @@ import { useNavigate } from 'react-router-dom';
 export const LoginPage = () => {
   const dispatch = useAppDispatch();
   const { token, isLoading, error } = useAppSelector(state => state.auth);
+  const { user } = useAppSelector(state => state.registration);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
@@ -46,6 +47,7 @@ export const LoginPage = () => {
 
   return (
     <div className={styles.loginPage}>
+      <p>{ user?.email }</p>
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
         <input
           type="text"

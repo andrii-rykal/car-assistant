@@ -11,8 +11,13 @@
     "component": "generate-react component"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.7.2",
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "@reduxjs/toolkit": "^2.4.0",
     "axios": "^1.7.9",
+    "bulma": "^1.0.2",
     "clsx": "^2.1.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -20,7 +25,7 @@
     "react-icons": "^5.4.0",
     "react-redux": "^9.1.2",
     "react-router-dom": "^7.0.2",
-    "sass": "^1.82.0",
+    "sass": "^1.83.0",
     "swiper": "^11.1.15"
   },
   "devDependencies": {
