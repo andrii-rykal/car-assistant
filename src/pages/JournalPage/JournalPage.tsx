@@ -21,9 +21,9 @@ export const JournalPage = () => {
   const [isShowCreateForm, setIsShowCreateForm] = useState(false);
 
   const {
-    register,
+    // register,
     handleSubmit,
-    formState: { errors },
+    // formState: { errors },
   } = useForm<FormData>();
 
   const onSubmit = (data: FormData) => {
