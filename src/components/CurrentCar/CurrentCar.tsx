@@ -5,7 +5,7 @@ import styles from './CurrentCar.module.scss';
 import { Button } from '../Button';
 import { AddNewCar } from '../../types';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { creatingCar } from '../../features/addCarSlice';
+import { creatingCar } from '../../features/AddCarSlice';
 
 export const CurrentCar = () => {
   const dispatch = useAppDispatch();
