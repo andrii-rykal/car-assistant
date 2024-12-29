@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { clsx } from 'clsx';
 import styles from './CurrentCar.module.scss';
@@ -6,6 +6,17 @@ import { Button } from '../Button';
 import { AddNewCar } from '../../types';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { creatingCar } from '../../features/AddCarSlice';
+
+const convertFormatDate = (date: Date) => {
+  const isoString = date.toISOString();
+  // const [year, month, day] = isoString.split('T')[0].split('-');
+  // return `${day}-${month}-${year}`;
+  return isoString.split('T')[0].split('-').reverse().join('-');
+};
+
+const convertArrayToNumber = (arr: number[]): number[] => {
+  return arr.map(item => +item);
+}
 
 export const CurrentCar = () => {
   const dispatch = useAppDispatch();
@@ -24,10 +35,18 @@ export const CurrentCar = () => {
     mode: 'onChange',
   });
 
+  useEffect(() => {
+    console.log(newCar);
+  }, [newCar]);
+
   const onSubmit = (data: AddNewCar) => {
+    if (data.purchaseDate instanceof Date) {
+      data.purchaseDate = convertFormatDate(data.purchaseDate);
+    }
+    data.fuelTypes = convertArrayToNumber(data.fuelTypes);
+    
     console.log(data);
     dispatch(creatingCar(data));
-    console.log(newCar);
     reset();
     setIsAddingCar(false);
   };
@@ -75,6 +94,7 @@ export const CurrentCar = () => {
             type="number"
             placeholder="Year"
             {...register('yearOfManufacture', {
+              valueAsNumber: true,
               required: 'Year is required',
               min: { value: 1900, message: 'Year must be at least 1900' },
               max: {
@@ -115,13 +135,24 @@ export const CurrentCar = () => {
             type={isSelectedDate ? 'date' : 'text'}
             placeholder="Purchase date"
             {...register('purchaseDate', {
+              valueAsDate: true,
               required: 'Date is required',
               validate: {
-                isDate: value =>
-                  !isNaN(new Date(value).getTime()) || 'Invalid date',
+                isDate: value => {
+                  const date =
+                    typeof value === 'string' ? new Date(value) : value;
+                  return (
+                    (date instanceof Date && !isNaN(date.getTime())) ||
+                    'Invalid date'
+                  );
+                },
                 notFuture: value => {
-                  const today = new Date().toISOString().split('T')[0];
-                  return value <= today || 'Date cannot be in the future';
+                  const date =
+                    typeof value === 'string' ? new Date(value) : value;
+                  if (!(date instanceof Date)) return 'Invalid date';
+                  const today = new Date();
+                  // today.setHours(0, 0, 0, 0);
+                  return date <= today || 'Date cannot be in the future';
                 },
               },
             })}
@@ -135,6 +166,7 @@ export const CurrentCar = () => {
             type="number"
             placeholder="Mileage"
             {...register('mileage', {
+              valueAsNumber: true,
               required: 'Mileage is required',
               validate: {
                 isNegative: value => value >= 0 || 'Mileage must be positive',
@@ -160,13 +192,7 @@ export const CurrentCar = () => {
           <fieldset className={styles.fieldset}>
             <legend>Select type of fuel:</legend>
             <label>
-              <input
-                type="checkbox"
-                value={1}
-                {...register('fuelTypes', {
-                  required: 'You must select at least one option',
-                })}
-              />
+              <input type="checkbox" value={1} {...register('fuelTypes')} />
               Petrol
             </label>
             <label>
@@ -201,9 +227,7 @@ export const CurrentCar = () => {
           />
           {isLoading && <span>Loading...</span>}
           {error && <p>{error}</p>}
-          {success && (
-            <p style={{ color: 'green' }}>Car created!</p>
-          )}
+          {success && <p style={{ color: 'green' }}>Car created!</p>}
         </form>
       )}
     </div>
