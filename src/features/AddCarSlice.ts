@@ -74,7 +74,7 @@ export const fetchCars = createAsyncThunk<
 });
 
 const addCarSlice = createSlice({
-  name: 'createCar',
+  name: 'addCar',
   initialState,
   reducers: {
     resetStateCar: state => {
@@ -126,5 +126,5 @@ const addCarSlice = createSlice({
   },
 });
 
-export default addCarSlice.reducer;
 export const { resetStateCar, showingForm, setSelectedCar } = addCarSlice.actions;
+export default addCarSlice.reducer;
