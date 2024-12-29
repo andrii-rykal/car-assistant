@@ -10,6 +10,7 @@ import {
   showingForm,
 } from '../../features/addCarSlice';
 import styles from './CreateCar.module.scss';
+import { RootState } from '../../app/store';
 
 const convertFormatDate = (date: Date) => {
   const isoString = date.toISOString();
@@ -22,7 +23,7 @@ const convertArrayToNumber = (arr: number[]): number[] => {
 
 export const CreateCar = () => {
   const dispatch = useAppDispatch();
-  const { createCar} = useAppSelector(state => state.addCar);
+  const { createCar} = useAppSelector((state: RootState) => state.addCar);
   const [isSelectedDate, setIsSelectedDate] = useState(false);
 
   const {
