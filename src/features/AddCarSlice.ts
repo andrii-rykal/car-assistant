@@ -43,7 +43,7 @@ export const creatingCar = createAsyncThunk<
   AddCarResponse,
   AddNewCar,
   { rejectValue: string }
->('cars/createCar', async (addCarData, { rejectWithValue }) => {
+>('addCar/createCar', async (addCarData, { rejectWithValue }) => {
   try {
     const response = await createCar(addCarData);
     return response.data;
@@ -60,7 +60,7 @@ export const fetchCars = createAsyncThunk<
   AddCarResponse[],
   void,
   { rejectValue: string }
->('cars/fetchCars', async (_, { rejectWithValue }) => {
+>('addCar/fetchCars', async (_, { rejectWithValue }) => {
   try {
     const response = await getCars();
     return response.data;
