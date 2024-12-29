@@ -4,6 +4,7 @@ import { Button } from '../Button';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { fetchCars, setSelectedCar, showingForm } from '../../features/addCarSlice';
 import { ChangeEvent, useEffect } from 'react';
+import { AddCarResponse } from '../../types';
 
 export const CurrentCar = () => {
   const dispatch = useAppDispatch();
@@ -15,7 +16,7 @@ export const CurrentCar = () => {
 
   const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const selectedId = +e.target.value;
-    const selectedCar = cars.find(car => car.id === selectedId) || null
+    const selectedCar = cars.find((car: AddCarResponse) => car.id === selectedId) || null
     dispatch(setSelectedCar(selectedCar))
   }
 
@@ -25,7 +26,7 @@ export const CurrentCar = () => {
         <option value="0" disabled>
           Choose the car
         </option>
-        {cars.map(car => (
+        {cars.map((car: AddCarResponse) => (
           <option value={car.id} key={car.id}>
             {`${car.brand} ${car.model} ${car.yearOfManufacture}`}
           </option>

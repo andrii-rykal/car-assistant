@@ -102,7 +102,7 @@ export const CreateCar = () => {
               validate: {
                 isInvalidLetters: value =>
                   !/[ioq]/i.test(value) ||
-                  'VIN must contains invalid letters (I, O, Q are not allowed)',
+                  'VIN must not contains invalid letters (I, O, Q are not allowed)',
                 onlyUppercaseAndNumbers: value =>
                   /^[A-HJ-NPR-Z0-9]+$/.test(value) ||
                   'VIN must contain only uppercase letters and numbers',
