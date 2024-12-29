@@ -122,7 +122,7 @@ const addCarSlice = createSlice({
       .addCase(fetchCars.rejected, (state, action) => {
         state.fetchCars.isLoading = false;
         state.fetchCars.error = action.payload ?? 'Unknown error';
-      });
+      }); 
   },
 });
 
