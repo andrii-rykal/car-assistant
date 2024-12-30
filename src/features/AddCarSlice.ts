@@ -126,5 +126,5 @@ const addCarSlice = createSlice({
   },
 });
 
-export default addCarSlice.reducer;
 export const { resetStateCar, showingForm, setSelectedCar } = addCarSlice.actions;
+export default addCarSlice.reducer;
