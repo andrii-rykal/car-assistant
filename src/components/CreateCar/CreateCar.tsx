@@ -8,7 +8,7 @@ import {
   creatingCar,
   resetStateCar,
   showingForm,
-} from '../../features/addCarSlice';
+} from '../../features/AddCarSlice';
 import styles from './CreateCar.module.scss';
 
 const convertFormatDate = (date: Date) => {

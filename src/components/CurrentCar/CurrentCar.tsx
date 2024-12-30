@@ -8,7 +8,7 @@ import {
   fetchCars,
   setSelectedCar,
   showingForm,
-} from '../../features/addCarSlice';
+} from '../../features/AddCarSlice';
 
 export const CurrentCar = () => {
   const dispatch = useAppDispatch();
