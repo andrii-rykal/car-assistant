@@ -1,16 +1,11 @@
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { clsx } from 'clsx';
 import { Button } from '../Button';
 import { AddNewCar } from '../../types';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import {
-  creatingCar,
-  resetStateCar,
-  showingForm,
-} from '../../features/addCarSlice';
+import { creatingCar, resetStateCar, showingForm } from '../../features/addCarSlice';
 import styles from './CreateCar.module.scss';
-import { RootState } from '../../app/store';
 
 const convertFormatDate = (date: Date) => {
   const isoString = date.toISOString();
@@ -23,7 +18,7 @@ const convertArrayToNumber = (arr: number[]): number[] => {
 
 export const CreateCar = () => {
   const dispatch = useAppDispatch();
-  const { createCar} = useAppSelector((state: RootState) => state.addCar);
+  const { createCar } = useAppSelector(state => state.addCar)
   const [isSelectedDate, setIsSelectedDate] = useState(false);
 
   const {

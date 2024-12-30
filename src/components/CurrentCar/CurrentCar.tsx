@@ -1,15 +1,14 @@
+import { ChangeEvent, useEffect } from 'react';
 import { CreateCar } from '../CreateCar';
 import styles from './CurrentCar.module.scss';
 import { Button } from '../Button';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { fetchCars, setSelectedCar, showingForm } from '../../features/addCarSlice';
-import { ChangeEvent, useEffect } from 'react';
 import { AddCarResponse } from '../../types';
-import { RootState } from '../../app/store';
+import { fetchCars, setSelectedCar, showingForm } from '../../features/addCarSlice';
 
 export const CurrentCar = () => {
   const dispatch = useAppDispatch();
-  const { isAddingCar, cars, currentUserCar } = useAppSelector((state: RootState) => state.addCar);
+  const { cars, currentUserCar, isAddingCar } = useAppSelector(state => state.addCar)
 
   useEffect(() => {
     dispatch(fetchCars());
