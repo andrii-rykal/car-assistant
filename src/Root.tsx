@@ -1,5 +1,5 @@
 import { HashRouter as Router, Route, Routes } from 'react-router-dom';
-// import { StrictMode } from 'react';
+import { StrictMode } from 'react';
 import { Provider } from 'react-redux';
 import { HomePage } from './pages/HomePage';
 import { AboutPage } from './pages/AboutPage';
@@ -17,7 +17,7 @@ import { ReminderPage } from './pages/ReminderPage';
 import { StatisticsPage } from './pages/StatisticsPage';
 
 export const Root = () => (
-  // <StrictMode>
+  <StrictMode>
     <Router>
       <Provider store={store}>
         <Routes>
@@ -47,5 +47,5 @@ export const Root = () => (
         </Routes>
       </Provider>
     </Router>
-  // </StrictMode>
+  </StrictMode>
 );
