@@ -5,7 +5,6 @@ import { HomePage } from './pages/HomePage';
 import { AboutPage } from './pages/AboutPage';
 import { ContactsPage } from './pages/ContactsPage';
 import { HelpPage } from './pages/HelpPage';
-import { store } from './app/store';
 import { App } from './App';
 import { RegistrationPage } from './pages/RegistrationPage';
 import { LoginPage } from './pages/LoginPage';
@@ -15,6 +14,7 @@ import { JournalPage } from './pages/JournalPage';
 import { GasPage } from './pages/GasPage';
 import { ReminderPage } from './pages/ReminderPage';
 import { StatisticsPage } from './pages/StatisticsPage';
+import { store } from './app/store';
 
 export const Root = () => (
   <StrictMode>
