@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { store } from '../app/store';
+import { getTokenStore } from './getTokenStore';
 
 export const client = axios.create({
   baseURL: 'https://car-assistant-app-production.up.railway.app/api',
@@ -9,8 +9,8 @@ export const client = axios.create({
 });
 
 client.interceptors.request.use(config => {
-  const state = store.getState();
-  const token = state.auth.token;
+  // const state = store.getState();
+  const token = getTokenStore();
 
   if (token && config.url !== '/auth/registration') {
     config.headers.Authorization = `Bearer ${token}`;

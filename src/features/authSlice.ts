@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { LoginData } from '../types';
 import { getToken } from '../api/getToken';
+import { setToken } from '../api/getTokenStore';
 
 // interface UserType {
 //   id: string;
@@ -41,6 +42,7 @@ const authSlice = createSlice({
     logout: state => {
       // state.user = null;
       state.token = null;
+      setToken(null);
     },
   },
   extraReducers: builder => {
@@ -55,6 +57,7 @@ const authSlice = createSlice({
           state.isLoading = false;
           // state.user = action.payload.user;
           state.token = action.payload.token;
+          setToken(action.payload.token);
         },
       )
       .addCase(
