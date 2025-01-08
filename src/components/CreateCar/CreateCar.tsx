@@ -1,12 +1,11 @@
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { clsx } from 'clsx';
 import { Button } from '../Button';
 import { AddNewCar } from '../../types';
 import {
   creatingCar,
-  fetchFuelTypes,
   resetStateCar,
   showingForm,
 } from '../../features/AddCarSlice';
@@ -25,10 +24,6 @@ export const CreateCar = () => {
   const dispatch = useAppDispatch();
   const { createCar, fuelTypes } = useAppSelector(state => state.addCar);
   const [isSelectedDate, setIsSelectedDate] = useState(false);
-
-  // useEffect(() => {
-  //   dispatch(fetchFuelTypes());
-  // }, [dispatch]);
 
   const {
     register,
