@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { AddCarResponse } from '../../types';
 import {
   fetchCars,
+  fetchFuelTypes,
   setSelectedCar,
   showingForm,
 } from '../../features/AddCarSlice';
@@ -18,6 +19,7 @@ export const CurrentCar = () => {
 
   useEffect(() => {
     dispatch(fetchCars());
+    dispatch(fetchFuelTypes())
   }, [dispatch]);
 
   const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {

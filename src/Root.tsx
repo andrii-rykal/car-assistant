@@ -15,6 +15,7 @@ import { GasPage } from './pages/GasPage';
 import { ReminderPage } from './pages/ReminderPage';
 import { StatisticsPage } from './pages/StatisticsPage';
 import { store } from './app/store';
+import { CarsPage } from './pages/CarsPage';
 
 export const Root = () => (
   <StrictMode>
@@ -34,6 +35,7 @@ export const Root = () => (
                 <Route path="gas" element={<GasPage />} />
                 <Route path="reminder" element={<ReminderPage />} />
                 <Route path="statistics" element={<StatisticsPage />} />
+                <Route path="cars" element={<CarsPage />} />
               </Route>
             </Route>
             <Route path="*" element={<p>Not found page</p>} />
@@ -42,6 +44,7 @@ export const Root = () => (
               <Route path="gas" element={<GasPage />} />
               <Route path="reminder" element={<ReminderPage />} />
               <Route path="statistics" element={<StatisticsPage />} />
+              <Route path="cars" element={<CarsPage />} />
             </Route> */}
           </Route>
         </Routes>

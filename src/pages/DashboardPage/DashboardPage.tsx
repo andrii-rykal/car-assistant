@@ -62,6 +62,15 @@ export const DashboardPage = () => {
                 Статистика
               </NavLink>
             </li>
+            <li>
+              <NavLink
+                to="cars"
+                className={getLinkClass}
+                style={getLinkStyle}
+              >
+                Автомобілі
+              </NavLink>
+            </li>
           </ul>
         </nav>
         <div className={styles.outlet}>

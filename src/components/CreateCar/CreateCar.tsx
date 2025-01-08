@@ -1,11 +1,12 @@
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { clsx } from 'clsx';
 import { Button } from '../Button';
 import { AddNewCar } from '../../types';
 import {
   creatingCar,
+  fetchFuelTypes,
   resetStateCar,
   showingForm,
 } from '../../features/AddCarSlice';
@@ -22,8 +23,12 @@ const convertArrayToNumber = (arr: number[]): number[] => {
 
 export const CreateCar = () => {
   const dispatch = useAppDispatch();
-  const { createCar } = useAppSelector(state => state.addCar);
+  const { createCar, fuelTypes } = useAppSelector(state => state.addCar);
   const [isSelectedDate, setIsSelectedDate] = useState(false);
+
+  // useEffect(() => {
+  //   dispatch(fetchFuelTypes());
+  // }, [dispatch]);
 
   const {
     register,
@@ -170,30 +175,23 @@ export const CreateCar = () => {
 
       <fieldset className={styles.fieldset}>
         <legend>Select type of fuel:</legend>
-        <label>
-          <input type="checkbox" value={1} {...register('fuelTypes')} />
-          Petrol
-        </label>
-        <label>
-          <input type="checkbox" value={2} {...register('fuelTypes')} />
-          Diesel
-        </label>
-        <label>
-          <input type="checkbox" value={3} {...register('fuelTypes')} />
-          Gas_LPG
-        </label>
-        <label>
-          <input type="checkbox" value={4} {...register('fuelTypes')} />
-          Gas_CNG
-        </label>
-        <label>
-          <input type="checkbox" value={5} {...register('fuelTypes')} />
-          Hybrid
-        </label>
-        <label>
-          <input type="checkbox" value={6} {...register('fuelTypes')} />
-          Electro
-        </label>
+        {fuelTypes.map(fuel => (
+          <label key={fuel.id}>
+            <input
+              type="checkbox"
+              value={fuel.id}
+              {...register('fuelTypes', {
+                validate: {
+                  maxTwoSelected: (value) => {
+                    const selected = Array.isArray(value) ? value : [];
+                    return selected.length <= 2 || 'You can select up to 2 fuel types';
+                  }
+                }
+              })}
+            />
+            {fuel.fuelType}
+          </label>
+        ))}
       </fieldset>
       <p>{errors.fuelTypes ? errors.fuelTypes.message : ''}</p>
 

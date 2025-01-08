@@ -1,9 +1,10 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AddNewCar } from '../types';
+import { AddNewCar, FuelType } from '../types';
 import { AddCarResponse } from '../types/AddCarResponse';
 import { createCar } from '../api/createCar';
 import { AxiosError } from 'axios';
 import { getCars } from '../api/getCars';
+import { getFuelTypes } from '../api/getFuelTypes';
 
 interface CreatingCarState {
   createCar: {
@@ -16,10 +17,16 @@ interface CreatingCarState {
     error: string | null;
     success: boolean;
   };
+  fetchFuelTypes: {
+    isLoading: boolean;
+    error: string | null;
+    success: boolean;
+  };
   newCar: AddCarResponse | null;
   cars: AddCarResponse[];
   isAddingCar: boolean;
   currentUserCar: AddCarResponse | null;
+  fuelTypes: FuelType[];
 }
 
 const initialState: CreatingCarState = {
@@ -33,10 +40,16 @@ const initialState: CreatingCarState = {
     error: null,
     success: false,
   },
+  fetchFuelTypes: {
+    isLoading: false,
+    error: null,
+    success: false,
+  },
   newCar: null,
   cars: [],
   isAddingCar: false,
-  currentUserCar: null
+  currentUserCar: null,
+  fuelTypes: []
 };
 
 export const creatingCar = createAsyncThunk<
@@ -69,6 +82,23 @@ export const fetchCars = createAsyncThunk<
 
     return rejectWithValue(
       err.response?.data.message || 'Failed to fetch cars. Please try again.',
+    );
+  }
+});
+
+export const fetchFuelTypes = createAsyncThunk<
+  FuelType[],
+  void,
+  { rejectValue: string }
+>('addCar/fetchFuelTypes', async (_, { rejectWithValue }) => {
+  try {
+    const response = await getFuelTypes();
+    return response.data;
+  } catch (error: unknown) {
+    const err = error as AxiosError<{ message: string }>;
+
+    return rejectWithValue(
+      err.response?.data.message || 'Failed to fetch fuel types. Please try again.',
     );
   }
 });
@@ -122,6 +152,21 @@ const addCarSlice = createSlice({
       .addCase(fetchCars.rejected, (state, action) => {
         state.fetchCars.isLoading = false;
         state.fetchCars.error = action.payload ?? 'Unknown error';
+      })
+      .addCase(fetchFuelTypes.pending, state => {
+        state.fetchFuelTypes.isLoading = true;
+        state.fetchFuelTypes.error = null;
+      })
+      .addCase(
+        fetchFuelTypes.fulfilled,
+        (state, action: PayloadAction<FuelType[]>) => {
+          state.fetchFuelTypes.isLoading = false;
+          state.fuelTypes = action.payload;
+        },
+      )
+      .addCase(fetchFuelTypes.rejected, (state, action) => {
+        state.fetchFuelTypes.isLoading = false;
+        state.fetchFuelTypes.error = action.payload ?? 'Unknown error';
       }); 
   },
 });
