@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AddNewCar, AddNewCarFromServer, FuelType } from '../types';
+import { AddNewCarFromServer, FuelType } from '../types';
 import { AddCarResponse } from '../types/AddCarResponse';
 import { createCar, deleteCar, getCars, updateCar } from '../api/cars';
 import { AxiosError } from 'axios';
