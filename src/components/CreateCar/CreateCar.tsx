@@ -27,20 +27,12 @@ export const CreateCar = () => {
     register,
     handleSubmit,
     setValue,
+    trigger,
     reset,
     formState: { errors },
   } = useForm<AddNewCar>({
     mode: 'onChange',
   });
-
-  useEffect(() => {
-    register('fuelTypes', {
-      validate: value => {
-        const selected = value || [];
-        return selected.length <= 2 || 'You can select up to 2 fuel types'
-      }
-    })
-  }, [register]); 
 
   useEffect(() => {
     if (editingCar) {
@@ -64,10 +56,11 @@ export const CreateCar = () => {
     const updatedFuelTypes = checked
       ? [...selectedFuelTypes, fuelId]
       : selectedFuelTypes.filter(id => id !== fuelId);
-    
+
     setSelectedFuelTypes(updatedFuelTypes);
     setValue('fuelTypes', updatedFuelTypes, { shouldValidate: true });
-  }
+    trigger('fuelTypes');
+  };
 
   const onSubmit = (data: AddNewCar) => {
     const carData = {
@@ -77,18 +70,17 @@ export const CreateCar = () => {
     };
 
     if (editingCar) {
-      dispatch(updatingCar({ id: editingCar.id, carData })).then(() =>{
-        dispatch(fetchCars())
+      dispatch(updatingCar({ id: editingCar.id, carData })).then(() => {
+        dispatch(fetchCars());
         dispatch(finishEditingCar());
         dispatch(resetStateCar());
       });
     } else {
-      dispatch(creatingCar(carData))
-        .then(() => {
-          dispatch(fetchCars())
-          dispatch(finishEditingCar());
-          dispatch(resetStateCar());
-        })
+      dispatch(creatingCar(carData)).then(() => {
+        dispatch(fetchCars());
+        dispatch(finishEditingCar());
+        dispatch(resetStateCar());
+      });
     }
 
     reset();
@@ -211,7 +203,9 @@ export const CreateCar = () => {
       />
       <p>{errors.colorCode?.message}</p>
 
-      <fieldset className={styles.fieldset}>
+      <fieldset className={clsx(styles.fieldset, {
+          [styles.error]: errors.fuelTypes,
+        })}>
         <legend>Select type of fuel:</legend>
         {fuelTypes.map(fuel => (
           <label key={fuel.id}>
@@ -219,6 +213,14 @@ export const CreateCar = () => {
               type="checkbox"
               value={fuel.id}
               checked={selectedFuelTypes.includes(fuel.id)}
+              {...register('fuelTypes', {
+                validate: {
+                  isRequired: (selectedFuelTypes) =>
+                    (selectedFuelTypes.length > 0) || 'At least one fuel type must be selected',
+                  maxTwo: (selectedFuelTypes) =>
+                    (selectedFuelTypes.length <= 2) || 'You can select up to 2 fuel types',
+                },
+              })}
               onChange={e => handleFuelTypeChange(fuel.id, e.target.checked)}
             />
             {fuel.fuelType}

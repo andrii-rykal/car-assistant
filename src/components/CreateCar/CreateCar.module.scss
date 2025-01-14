@@ -24,9 +24,7 @@
   }
 }
 
-.error {
-  border-color: red;
-}
+
 .fieldset {
   border: 1px solid var(--color-bg-header);
   border-radius: 10px;
@@ -34,11 +32,14 @@
   display: flex;
   gap: 20px;
   flex-wrap: wrap;
-  // justify-content: center;
 
   & input {
     margin-right: 5px;
   }
+}
+
+.error {
+  border-color: red;
 }
 
 .btn {
