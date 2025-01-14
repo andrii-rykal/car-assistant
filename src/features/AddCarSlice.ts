@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AddNewCar, FuelType } from '../types';
+import { AddNewCar, AddNewCarFromServer, FuelType } from '../types';
 import { AddCarResponse } from '../types/AddCarResponse';
 import { createCar, deleteCar, getCars, updateCar } from '../api/cars';
 import { AxiosError } from 'axios';
@@ -55,11 +55,11 @@ const initialState: CreatingCarState = {
 
 export const creatingCar = createAsyncThunk<
   AddCarResponse,
-  AddNewCar,
+  AddNewCarFromServer,
   { rejectValue: string }
->('addCar/createCar', async (addCarData, { rejectWithValue }) => {
+>('addCar/createCar', async (carData, { rejectWithValue }) => {
   try {
-    const response = await createCar(addCarData);
+    const response = await createCar(carData);
     return response.data;
   } catch (error: unknown) {
     const err = error as AxiosError<{ message: string }>;
@@ -124,7 +124,7 @@ export const deletingCar = createAsyncThunk<
 
 export const updatingCar = createAsyncThunk<
   void,
-  { id: number; carData: AddNewCar },
+  { id: number; carData: AddNewCarFromServer },
   { rejectValue: string }
 >('addCar/updateCar', async ({ id, carData }, { rejectWithValue }) => {
   try {

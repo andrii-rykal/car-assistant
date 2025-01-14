@@ -83,10 +83,10 @@ export const CreateCar = () => {
         dispatch(resetStateCar());
       });
     } else {
-      dispatch(creatingCar(data))
+      dispatch(creatingCar(carData))
         .then(() => {
           dispatch(fetchCars())
-          // dispatch(finishEditingCar());
+          dispatch(finishEditingCar());
           dispatch(resetStateCar());
         })
     }
