@@ -3,7 +3,7 @@ export interface AddNewCar {
   model: string;
   yearOfManufacture: number;
   vinCode: string;
-  purchaseDate: string | Date;
+  purchaseDate: number | string;
   mileage: number;
   colorCode: string;
   fuelTypes: number[];

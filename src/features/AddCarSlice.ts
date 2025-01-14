@@ -1,9 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AddNewCar, FuelType } from '../types';
 import { AddCarResponse } from '../types/AddCarResponse';
-import { createCar } from '../api/createCar';
+import { createCar, deleteCar, getCars, updateCar } from '../api/cars';
 import { AxiosError } from 'axios';
-import { getCars } from '../api/getCars';
 import { getFuelTypes } from '../api/getFuelTypes';
 
 interface CreatingCarState {
@@ -27,6 +26,7 @@ interface CreatingCarState {
   isAddingCar: boolean;
   currentUserCar: AddCarResponse | null;
   fuelTypes: FuelType[];
+  editingCar: AddCarResponse | null;
 }
 
 const initialState: CreatingCarState = {
@@ -49,7 +49,8 @@ const initialState: CreatingCarState = {
   cars: [],
   isAddingCar: false,
   currentUserCar: null,
-  fuelTypes: []
+  fuelTypes: [],
+  editingCar: null,
 };
 
 export const creatingCar = createAsyncThunk<
@@ -98,7 +99,41 @@ export const fetchFuelTypes = createAsyncThunk<
     const err = error as AxiosError<{ message: string }>;
 
     return rejectWithValue(
-      err.response?.data.message || 'Failed to fetch fuel types. Please try again.',
+      err.response?.data.message ||
+        'Failed to fetch fuel types. Please try again.',
+    );
+  }
+});
+
+export const deletingCar = createAsyncThunk<
+  number,
+  number,
+  { rejectValue: string }
+>('addCar/deleteCar', async (id, { rejectWithValue }) => {
+  try {
+    await deleteCar(id);
+    return id;
+  } catch (error: unknown) {
+    const err = error as AxiosError<{ message: string }>;
+
+    return rejectWithValue(
+      err.response?.data.message || 'Failed to delete car. Please try again.',
+    );
+  }
+});
+
+export const updatingCar = createAsyncThunk<
+  void,
+  { id: number; carData: AddNewCar },
+  { rejectValue: string }
+>('addCar/updateCar', async ({ id, carData }, { rejectWithValue }) => {
+  try {
+    await updateCar(id, carData);
+  } catch (error: unknown) {
+    const err = error as AxiosError<{ message: string }>;
+
+    return rejectWithValue(
+      err.response?.data.message || 'Failed to update car. Please try again.',
     );
   }
 });
@@ -113,12 +148,17 @@ const addCarSlice = createSlice({
       state.createCar.success = false;
       state.newCar = null;
     },
-    showingForm: (state, action: PayloadAction<boolean>) => {
-      state.isAddingCar = action.payload;
-    },
     setSelectedCar: (state, action: PayloadAction<AddCarResponse | null>) => {
       state.currentUserCar = action.payload;
-    }
+    },
+    startEditingCar: (state, action: PayloadAction<AddCarResponse | null>) => {
+      state.editingCar = action.payload;
+      state.isAddingCar = true;
+    },
+    finishEditingCar: state => {
+      state.editingCar = null;
+      state.isAddingCar = false;
+    },
   },
   extraReducers: builder => {
     builder
@@ -167,9 +207,41 @@ const addCarSlice = createSlice({
       .addCase(fetchFuelTypes.rejected, (state, action) => {
         state.fetchFuelTypes.isLoading = false;
         state.fetchFuelTypes.error = action.payload ?? 'Unknown error';
-      }); 
+      })
+      .addCase(deletingCar.pending, state => {
+        state.fetchCars.isLoading = true;
+        state.fetchCars.error = null;
+      })
+      .addCase(
+        deletingCar.fulfilled,
+        (state, action: PayloadAction<number>) => {
+          state.fetchCars.isLoading = false;
+          state.cars = state.cars.filter(car => car.id !== action.payload);
+        },
+      )
+      .addCase(deletingCar.rejected, (state, action) => {
+        state.fetchCars.isLoading = false;
+        state.fetchCars.error = action.payload ?? 'Unknown error';
+      })
+      .addCase(updatingCar.pending, state => {
+        state.createCar.isLoading = true;
+        state.createCar.error = null;
+      })
+      .addCase(updatingCar.fulfilled, state => {
+        state.createCar.isLoading = false;
+        state.createCar.success = true;
+      })
+      .addCase(updatingCar.rejected, (state, action) => {
+        state.createCar.isLoading = false;
+        state.createCar.error = action.payload ?? 'Unknown error';
+      });
   },
 });
 
-export const { resetStateCar, showingForm, setSelectedCar } = addCarSlice.actions;
+export const {
+  resetStateCar,
+  setSelectedCar,
+  startEditingCar,
+  finishEditingCar,
+} = addCarSlice.actions;
 export default addCarSlice.reducer;

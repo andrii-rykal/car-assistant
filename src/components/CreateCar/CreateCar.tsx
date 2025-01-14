@@ -1,53 +1,97 @@
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { clsx } from 'clsx';
 import { Button } from '../Button';
 import { AddNewCar } from '../../types';
 import {
   creatingCar,
+  fetchCars,
+  finishEditingCar,
   resetStateCar,
-  showingForm,
+  updatingCar,
 } from '../../features/AddCarSlice';
 import styles from './CreateCar.module.scss';
-
-const convertFormatDate = (date: Date) => {
-  const isoString = date.toISOString();
-  return isoString.split('T')[0].split('-').reverse().join('-');
-};
-
-const convertArrayToNumber = (arr: number[]): number[] => {
-  return arr.map(item => +item);
-};
+import { numberFromDate } from '../../functions/numberFromDate';
+import { dateFromNumber } from '../../functions/dateFromNumber';
 
 export const CreateCar = () => {
   const dispatch = useAppDispatch();
-  const { createCar, fuelTypes } = useAppSelector(state => state.addCar);
+  const { createCar, fuelTypes, editingCar } = useAppSelector(
+    state => state.addCar,
+  );
   const [isSelectedDate, setIsSelectedDate] = useState(false);
+  const [selectedFuelTypes, setSelectedFuelTypes] = useState<number[]>([]);
 
   const {
     register,
     handleSubmit,
+    setValue,
     reset,
     formState: { errors },
   } = useForm<AddNewCar>({
     mode: 'onChange',
   });
 
+  useEffect(() => {
+    register('fuelTypes', {
+      validate: value => {
+        const selected = value || [];
+        return selected.length <= 2 || 'You can select up to 2 fuel types'
+      }
+    })
+  }, [register]); 
+
+  useEffect(() => {
+    if (editingCar) {
+      reset({
+        brand: editingCar.brand || '',
+        model: editingCar.model || '',
+        yearOfManufacture: editingCar.yearOfManufacture || 0,
+        vinCode: editingCar.vinCode || '',
+        purchaseDate: dateFromNumber(editingCar.purchaseDate),
+        mileage: editingCar.mileage || 0,
+        colorCode: editingCar.colorCode || '',
+        fuelTypes: editingCar.fuelTypesIds || [],
+      });
+      setSelectedFuelTypes(editingCar.fuelTypesIds || []);
+    } else {
+      reset();
+    }
+  }, [editingCar, reset]);
+
+  const handleFuelTypeChange = (fuelId: number, checked: boolean) => {
+    const updatedFuelTypes = checked
+      ? [...selectedFuelTypes, fuelId]
+      : selectedFuelTypes.filter(id => id !== fuelId);
+    
+    setSelectedFuelTypes(updatedFuelTypes);
+    setValue('fuelTypes', updatedFuelTypes, { shouldValidate: true });
+  }
+
   const onSubmit = (data: AddNewCar) => {
-    if (data.purchaseDate instanceof Date) {
-      data.purchaseDate = convertFormatDate(data.purchaseDate);
+    const carData = {
+      ...data,
+      purchaseDate: numberFromDate(data.purchaseDate),
+      fuelTypes: data.fuelTypes.map(Number),
+    };
+
+    if (editingCar) {
+      dispatch(updatingCar({ id: editingCar.id, carData })).then(() =>{
+        dispatch(fetchCars())
+        dispatch(finishEditingCar());
+        dispatch(resetStateCar());
+      });
+    } else {
+      dispatch(creatingCar(data))
+        .then(() => {
+          dispatch(fetchCars())
+          // dispatch(finishEditingCar());
+          dispatch(resetStateCar());
+        })
     }
 
-    data.fuelTypes = convertArrayToNumber(data.fuelTypes);
-
-    dispatch(creatingCar(data));
     reset();
-
-    setTimeout(() => {
-      dispatch(resetStateCar());
-      dispatch(showingForm(false));
-    }, 2000);
   };
 
   return (
@@ -62,7 +106,7 @@ export const CreateCar = () => {
           [styles.error]: errors.brand,
         })}
       />
-      <p>{errors.brand ? errors.brand.message : ''}</p>
+      <p>{errors.brand?.message}</p>
       <input
         type="text"
         placeholder="Model"
@@ -73,7 +117,7 @@ export const CreateCar = () => {
           [styles.error]: errors.model,
         })}
       />
-      <p>{errors.model ? errors.model.message : ''}</p>
+      <p>{errors.model?.message}</p>
       <input
         type="number"
         placeholder="Year"
@@ -90,7 +134,7 @@ export const CreateCar = () => {
           [styles.error]: errors.yearOfManufacture,
         })}
       />
-      <p>{errors.yearOfManufacture ? errors.yearOfManufacture.message : ''}</p>
+      <p>{errors.yearOfManufacture?.message}</p>
       <input
         type="text"
         placeholder="VIN"
@@ -111,7 +155,7 @@ export const CreateCar = () => {
           [styles.error]: errors.vinCode,
         })}
       />
-      <p>{errors.vinCode ? errors.vinCode.message : ''}</p>
+      <p>{errors.vinCode?.message}</p>
       <input
         type={isSelectedDate ? 'date' : 'text'}
         placeholder="Purchase date"
@@ -127,20 +171,19 @@ export const CreateCar = () => {
               );
             },
             notFuture: value => {
-              const date = typeof value === 'string' ? new Date(value) : value;
-              if (!(date instanceof Date)) return 'Invalid date';
+              const date = new Date(value);
               const today = new Date();
-              // today.setHours(0, 0, 0, 0);
               return date <= today || 'Date cannot be in the future';
             },
           },
         })}
-        onChange={e => setIsSelectedDate(!!e.target.value)}
+        onFocus={() => setIsSelectedDate(true)}
+        onBlur={() => setIsSelectedDate(false)}
         className={clsx(styles.purchaseDate, {
           [styles.error]: errors.purchaseDate,
         })}
       />
-      <p>{errors.purchaseDate ? errors.purchaseDate.message : ''}</p>
+      <p>{errors.purchaseDate?.message}</p>
       <input
         type="number"
         placeholder="Mileage"
@@ -155,7 +198,7 @@ export const CreateCar = () => {
           [styles.error]: errors.mileage,
         })}
       />
-      <p>{errors.mileage ? errors.mileage.message : ''}</p>
+      <p>{errors.mileage?.message}</p>
       <input
         type="text"
         placeholder="Color Code"
@@ -166,7 +209,7 @@ export const CreateCar = () => {
           [styles.error]: errors.colorCode,
         })}
       />
-      <p>{errors.colorCode ? errors.colorCode.message : ''}</p>
+      <p>{errors.colorCode?.message}</p>
 
       <fieldset className={styles.fieldset}>
         <legend>Select type of fuel:</legend>
@@ -175,27 +218,25 @@ export const CreateCar = () => {
             <input
               type="checkbox"
               value={fuel.id}
-              {...register('fuelTypes', {
-                validate: {
-                  maxTwoSelected: (value) => {
-                    const selected = Array.isArray(value) ? value : [];
-                    return selected.length <= 2 || 'You can select up to 2 fuel types';
-                  }
-                }
-              })}
+              checked={selectedFuelTypes.includes(fuel.id)}
+              onChange={e => handleFuelTypeChange(fuel.id, e.target.checked)}
             />
             {fuel.fuelType}
           </label>
         ))}
       </fieldset>
-      <p>{errors.fuelTypes ? errors.fuelTypes.message : ''}</p>
+      <p>{errors.fuelTypes?.message}</p>
 
-      <Button type="submit" text="Add car" className={styles.btn} />
+      <Button
+        type="submit"
+        text={editingCar ? 'Update car' : 'Add car'}
+        className={styles.btn}
+      />
       <Button
         type="button"
         text="Cancel"
         className={styles.btn}
-        onClick={() => dispatch(showingForm(false))}
+        onClick={() => dispatch(finishEditingCar())}
       />
       {createCar.isLoading && <span>Loading...</span>}
       {createCar.error && <p>{createCar.error}</p>}

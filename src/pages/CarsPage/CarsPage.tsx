@@ -1,3 +1,4 @@
+import { Fragment, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from '../../components/Button';
 import styles from './CarsPage.module.scss';
@@ -9,28 +10,39 @@ import {
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { setSelectedCar, showingForm } from '../../features/AddCarSlice';
+import {
+  deletingCar,
+  fetchCars,
+  setSelectedCar,
+  startEditingCar,
+} from '../../features/AddCarSlice';
 import { CreateCar } from '../../components/CreateCar';
 import { AddCarResponse } from '../../types';
-import * as React from 'react';
+import { dateFromNumber } from '../../functions/dateFromNumber';
 
 export const CarsPage = () => {
   const dispatch = useAppDispatch();
   const [isShowDetails, setIsShowDetails] = useState(false);
-  const { cars, currentUserCar, isAddingCar, fuelTypes } = useAppSelector(state => state.addCar);
+  const {
+    cars,
+    currentUserCar,
+    isAddingCar,
+    fuelTypes,
+    fetchCars: { isLoading, error },
+  } = useAppSelector(state => state.addCar);
 
   const nameOfFuelType = (arr: number[]): string => {
     const result: string[] = [];
     arr.forEach(el => {
       fuelTypes.forEach(type => {
         if (el === type.id) {
-          result.push(type.fuelType)
+          result.push(type.fuelType);
         }
-      })
-    })
+      });
+    });
 
     return result.join('/');
-  }
+  };
 
   const handleShowDetails = (car: AddCarResponse) => {
     // setIsShowDetails(!isShowDetails);
@@ -45,9 +57,22 @@ export const CarsPage = () => {
     }
   };
 
-  const toggleArrowDetails = (car: AddCarResponse )=> {
+  const toggleArrowDetails = (car: AddCarResponse) => {
     return isShowDetails && currentUserCar?.id === car.id;
   };
+
+  const handleDelete = (id: number) => {
+    dispatch(deletingCar(id));
+  };
+
+  const handleEdit = (car: AddCarResponse) => {
+    dispatch(setSelectedCar(car));
+    dispatch(startEditingCar(car))
+  }
+
+  useEffect(() => {
+    dispatch(fetchCars());
+  }, [dispatch]);
 
   return (
     <div className={styles.carsPage}>
@@ -65,7 +90,7 @@ export const CarsPage = () => {
           </thead>
           <tbody>
             {cars.map((car, index) => (
-              <React.Fragment key={car.id}>
+              <Fragment key={car.id}>
                 <tr>
                   <td>{index + 1}</td>
                   <td>{car.brand}</td>
@@ -73,10 +98,13 @@ export const CarsPage = () => {
                   <td>{car.yearOfManufacture}</td>
                   <td>
                     <div className={styles.rowButtons}>
-                      <button className={styles.rowBtn}>
+                      <button className={styles.rowBtn} onClick={() => handleEdit(car)}>
                         <FontAwesomeIcon icon={faPenToSquare} size="lg" />
                       </button>
-                      <button className={styles.rowBtn}>
+                      <button
+                        className={styles.rowBtn}
+                        onClick={() => handleDelete(car.id)}
+                      >
                         <FontAwesomeIcon icon={faTrash} size="lg" />
                       </button>
                       <button
@@ -104,7 +132,9 @@ export const CarsPage = () => {
                           </tr>
                           <tr>
                             <th colSpan={2}>Purchase date</th>
-                            <td colSpan={3}>{car.purchaseDate.split('-').reverse().join('-')}</td>
+                            <td colSpan={3}>
+                              {dateFromNumber(car.purchaseDate)}
+                            </td>
                           </tr>
                           <tr>
                             <th colSpan={2}>Mileage</th>
@@ -116,31 +146,28 @@ export const CarsPage = () => {
                           </tr>
                           <tr>
                             <th colSpan={2}>Fuel Types</th>
-                            <td colSpan={3}>{nameOfFuelType(car.fuelTypesIds)}</td>
+                            <td colSpan={3}>
+                              {nameOfFuelType(car.fuelTypesIds)}
+                            </td>
                           </tr>
                         </tbody>
                       </table>
                     </td>
                   </tr>
                 )}
-              </React.Fragment>
+              </Fragment>
             ))}
-
-            {/* <tr>
-              <td>2</td>
-              <td>Ford</td>
-              <td>Focus</td>
-              <td>2020</td>
-              <td></td>
-            </tr> */}
           </tbody>
         </table>
 
         <Button
           text={'Add car'}
           className={styles.addCarBtn}
-          onClick={() => dispatch(showingForm(true))}
+          onClick={() => dispatch(startEditingCar(null))}
         />
+
+        {isLoading && <span>Loading...</span>}
+        {error && <span>{ error }</span>}
 
         {isAddingCar && <CreateCar />}
       </div>

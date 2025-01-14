@@ -5,7 +5,7 @@ export interface AddCarResponse {
   "model": string,
   "yearOfManufacture": number,
   "vinCode": string,
-  "purchaseDate": string,
+  "purchaseDate": number,
   "mileage": number,
   "colorCode": string,
   "fuelTypesIds": number[]

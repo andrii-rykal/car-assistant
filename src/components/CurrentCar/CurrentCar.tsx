@@ -8,7 +8,7 @@ import {
   fetchCars,
   fetchFuelTypes,
   setSelectedCar,
-  showingForm,
+  startEditingCar,
 } from '../../features/AddCarSlice';
 
 export const CurrentCar = () => {
@@ -52,7 +52,7 @@ export const CurrentCar = () => {
       <Button
         text={'Add car'}
         className={styles.addCarBtn}
-        onClick={() => dispatch(showingForm(true))}
+        onClick={() => dispatch(startEditingCar(null))}
       />
 
       {isAddingCar && <CreateCar />}
