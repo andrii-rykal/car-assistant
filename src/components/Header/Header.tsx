@@ -17,7 +17,7 @@ const getLinkStyle = ({ isActive }: { isActive: boolean }) => ({
 });
 
 export const Header = () => {
-  const [isOpenMenu, setIsOpenMenu] = useState(true);
+  const [isOpenMenu, setIsOpenMenu] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const { token } = useAppSelector(state => state.auth);
   const { user } = useAppSelector(state => state.registration);
@@ -25,8 +25,12 @@ export const Header = () => {
   const navigate = useNavigate();
 
   const getCloseMenu = () => {
-    setIsOpenMenu(true);
+    setIsOpenMenu(false);
   };
+
+  const getToddleMenu = () => {
+    setIsOpenMenu(!isOpenMenu)
+  }
 
   const handleRegister = () => {
     navigate('register');
@@ -46,14 +50,14 @@ export const Header = () => {
   };
 
   useEffect(() => {
-    if (!isOpenMenu) {
-      document.body.classList.add(styles.noScroll);
+    if (isOpenMenu) {
+      document.body.classList.add('noScroll');
     } else {
-      document.body.classList.remove(styles.noScroll);
+      document.body.classList.remove('noScroll');
     }
 
     return () => {
-      document.body.classList.remove(styles.noScroll);
+      document.body.classList.remove('noScroll');
     };
   }, [isOpenMenu]);
 
@@ -69,7 +73,7 @@ export const Header = () => {
     window.addEventListener('resize', handleResize);
 
     return () => {
-      window.addEventListener('resize', handleResize);
+      window.removeEventListener('resize', handleResize);
     };
   }, [windowWidth]);
 
@@ -80,13 +84,13 @@ export const Header = () => {
           <img src="" alt="Logo" />
         </Link>
         <Button
-          text={isOpenMenu ? <Image.MenuOpen /> : <Image.MenuClose />}
+          text={!isOpenMenu ? <Image.MenuOpen /> : <Image.MenuClose />}
           className={styles.openBtn}
-          onClick={() => setIsOpenMenu(!isOpenMenu)}
+          onClick={getToddleMenu}
         />
         <nav
           className={clsx(styles.nav, {
-            [styles.visibleMenu]: !isOpenMenu,
+            [styles.visibleMenu]: isOpenMenu,
           })}
         >
           <ul className={styles.list}>

@@ -1,5 +1,5 @@
 body {
-  // overflow: hidden;
+  overflow-x: visible;
 }
 
 a {
@@ -15,4 +15,16 @@ button {
   background-color: transparent;
   border: none;
   // cursor: pointer;
+}
+
+body.noScroll {
+  // overflow: hidden;
+  height: 100vh;
+  position: fixed;
+  width: 100%;
+}
+
+.noScroll {
+  overflow: hidden;
+  height: 100%;
 }

@@ -5,6 +5,11 @@ export const HomePage = () => {
     <div>
       <h1>Home page</h1>
       <MainSlider />
+      <div style={{
+        width: '100%',
+        height: '100vh',
+        backgroundColor: "#ccc"
+      }}></div>
     </div>
   )
 }
