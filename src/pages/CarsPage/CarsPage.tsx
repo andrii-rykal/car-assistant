@@ -3,6 +3,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from '../../components/Button';
 import styles from './CarsPage.module.scss';
 import { useState } from 'react';
+import {
+  faCaretDown,
+  faCaretUp,
+  faPenToSquare,
+  faTrash,
+} from '@fortawesome/free-solid-svg-icons';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   deletingCar,
